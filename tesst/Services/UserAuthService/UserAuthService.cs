@@ -28,7 +28,6 @@ namespace admin.Services.UserAuthService
 
         public async Task<(string, DateTime)> Login(string username, string password)
         {
-            Console.WriteLine("1");
             
             var user = await _userService.GetUsername(username);
             if (user == null) throw new ErrorException(ErrorUtil.NoUserFound);
@@ -40,14 +39,10 @@ namespace admin.Services.UserAuthService
 
             roleClaim = Constants.CLAIM_VALUE_USER;
 
-            Console.WriteLine("2");
-
             var claims = new List<Claim>() {
                 new Claim(JwtRegisteredClaimNames.NameId, user.Username),
                 new Claim(Constants.CLAIM_TYPES_ROLE, roleClaim)
             };
-
-            Console.WriteLine("3");
 
             var (token, expires) = _tokenGenerator.CreateToken(claims);
 

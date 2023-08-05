@@ -100,6 +100,24 @@ namespace admin.Controllers
             }
         }
 
+        // for dev only
+        [HttpPost("InsertUser/no-auth")]
+        [ProducesResponseType(typeof(GenericResponse<UserData>), 200)]
+        [ProducesResponseType(typeof(Error), 400)]
+        public async Task<IActionResult> InsertUserNoAuth([FromBody] UserData User)
+        {
+            try
+            {
+
+                var result = await _UserService.Add(User);
+                return Ok(new GenericResponse<UserData>() { Data = result });
+            }
+            catch (ErrorException e)
+            {
+                return BadRequest(new BasicResponse() { Error = e.Error });
+            }
+        }
+
         [HttpPut("UpdateUser")]
         public async Task<IActionResult> UpdateUser(UserData User)
         {
