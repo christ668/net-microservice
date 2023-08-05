@@ -16,7 +16,10 @@ namespace common.Model
         {
         }
 
+        public virtual DbSet<Activeorder> Activeorders { get; set; } = null!;
+        public virtual DbSet<Composition> Compositions { get; set; } = null!;
         public virtual DbSet<Guesttable> Guesttables { get; set; } = null!;
+        public virtual DbSet<Recipe> Recipes { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Userdetail> Userdetails { get; set; } = null!;
 
@@ -34,6 +37,68 @@ namespace common.Model
             modelBuilder.UseCollation("utf8mb4_general_ci")
                 .HasCharSet("utf8mb4");
 
+            modelBuilder.Entity<Activeorder>(entity =>
+            {
+                entity.HasKey(e => new { e.IdRecipe, e.IdGuestTable })
+                    .HasName("PRIMARY")
+                    .HasAnnotation("MySql:IndexPrefixLength", new[] { 0, 0 });
+
+                entity.ToTable("activeorder");
+
+                entity.HasIndex(e => e.IdGuestTable, "fk_table3_table2");
+
+                entity.Property(e => e.IdRecipe)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("idRecipe");
+
+                entity.Property(e => e.IdGuestTable)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("idGuestTable");
+
+                entity.Property(e => e.CreateDate)
+                    .HasColumnType("datetime")
+                    .HasColumnName("createDate");
+
+                entity.HasOne(d => d.IdGuestTableNavigation)
+                    .WithMany(p => p.Activeorders)
+                    .HasForeignKey(d => d.IdGuestTable)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_table3_table2");
+
+                entity.HasOne(d => d.IdRecipeNavigation)
+                    .WithMany(p => p.Activeorders)
+                    .HasForeignKey(d => d.IdRecipe)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("fk_table3_table1");
+            });
+
+            modelBuilder.Entity<Composition>(entity =>
+            {
+                entity.ToTable("composition");
+
+                entity.HasIndex(e => e.RecipeId, "recipeID");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Dose).HasColumnName("dose");
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(255)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.RecipeId)
+                    .HasColumnType("int(11)")
+                    .HasColumnName("recipeID");
+
+                entity.HasOne(d => d.Recipe)
+                    .WithMany(p => p.Compositions)
+                    .HasForeignKey(d => d.RecipeId)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("composition_ibfk_1");
+            });
+
             modelBuilder.Entity<Guesttable>(entity =>
             {
                 entity.ToTable("guesttable");
@@ -47,6 +112,21 @@ namespace common.Model
                 entity.Property(e => e.PlacementDate).HasColumnType("datetime");
 
                 entity.Property(e => e.RoomPosition).HasMaxLength(50);
+            });
+
+            modelBuilder.Entity<Recipe>(entity =>
+            {
+                entity.ToTable("recipe");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Name)
+                    .HasMaxLength(50)
+                    .HasColumnName("name");
+
+                entity.Property(e => e.Price).HasColumnName("price");
             });
 
             modelBuilder.Entity<User>(entity =>

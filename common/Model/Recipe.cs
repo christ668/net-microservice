@@ -3,19 +3,19 @@ using System.Collections.Generic;
 
 namespace common.Model
 {
-    public partial class Guesttable
+    public partial class Recipe
     {
-        public Guesttable()
+        public Recipe()
         {
             Activeorders = new HashSet<Activeorder>();
+            Compositions = new HashSet<Composition>();
         }
 
         public int Id { get; set; }
-        public string RoomPosition { get; set; } = null!;
-        public int Chair { get; set; }
-        public bool IsActive { get; set; }
-        public DateTime PlacementDate { get; set; }
+        public string Name { get; set; } = null!;
+        public double Price { get; set; }
 
         public virtual ICollection<Activeorder> Activeorders { get; set; }
+        public virtual ICollection<Composition> Compositions { get; set; }
     }
 }
