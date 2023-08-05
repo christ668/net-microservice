@@ -17,6 +17,7 @@ namespace common.Model
         }
 
         public virtual DbSet<User> Users { get; set; } = null!;
+        public virtual DbSet<Userdetail> Userdetails { get; set; } = null!;
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
@@ -49,6 +50,29 @@ namespace common.Model
                 entity.Property(e => e.Password).HasMaxLength(200);
 
                 entity.Property(e => e.Username).HasMaxLength(45);
+            });
+
+            modelBuilder.Entity<Userdetail>(entity =>
+            {
+                entity.ToTable("userdetail");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.ActiveAddress).HasMaxLength(200);
+
+                entity.Property(e => e.MaritalStatus).HasMaxLength(200);
+
+                entity.Property(e => e.Nik)
+                    .HasMaxLength(200)
+                    .HasColumnName("NIK");
+
+                entity.HasOne(d => d.IdNavigation)
+                    .WithOne(p => p.Userdetail)
+                    .HasForeignKey<Userdetail>(d => d.Id)
+                    .OnDelete(DeleteBehavior.ClientSetNull)
+                    .HasConstraintName("userdetail_ibfk_1");
             });
 
             OnModelCreatingPartial(modelBuilder);

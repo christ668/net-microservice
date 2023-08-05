@@ -32,11 +32,11 @@ namespace admin.Controllers
         {
             try
             {
-                var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
-                var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
+                //var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
+                //var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
 
-                if (!authenticated)
-                    return Unauthorized();
+                //if (!authenticated)
+                //    return Unauthorized();
 
                 var result = await _UserService.GetAll();
                 return Ok
@@ -61,11 +61,11 @@ namespace admin.Controllers
             
             try
             {
-                var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
-                var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
+                //var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
+                //var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
 
-                if (!authenticated)
-                    return Unauthorized();
+                //if (!authenticated)
+                //    return Unauthorized();
 
                 var result = await _UserService.GetUserById(Id);
                 return Ok(new GenericResponse<UserData>() { Data = result });
@@ -123,11 +123,11 @@ namespace admin.Controllers
         {
             try
             {
-                var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
-                var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
+                //var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
+                //var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
 
-                if (!authenticated)
-                    return Unauthorized();
+                //if (!authenticated)
+                //    return Unauthorized();
 
                 var result = await _UserService.Update(User);
                 return Ok(new GenericResponse<UserData>() { Data = result });
@@ -143,11 +143,11 @@ namespace admin.Controllers
         {
             try
             {
-                var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
-                var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
+                //var nameClaim = Request.Headers[HeaderNames.Authorization].ToString();
+                //var authenticated = _UserAuthService.ValidateToken(nameClaim.Replace("Bearer ", ""));
 
-                if (!authenticated)
-                    return Unauthorized();
+                //if (!authenticated)
+                //    return Unauthorized();
 
                 await _UserService.Delete(Id);
                 return Ok(new BasicResponse() { Message = "delete success" });

@@ -9,7 +9,9 @@ namespace common.Helper
 {
     public static class ErrorUtil
     {
-        public static readonly Error NoUserFound = new Error() { code = "10000", message = "No User Found with current param" };
+        public static readonly Error NoUserFound = new Error() { code = "9000", message = "No User Found with current param" };
+        public static readonly Error NoUserDetailFound = new Error() { code = "9001", message = "No User Detail Found with current param" };
+
         public static readonly Error AuthTokenInvalid = new Error() { code = "10001", message = "Auth token invalid" };
         public static readonly Error LoginInvalid = new Error() { code = "10002", message = "Login Invalid" };
     }

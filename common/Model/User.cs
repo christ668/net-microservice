@@ -11,5 +11,7 @@ namespace common.Model
         public string Username { get; set; } = null!;
         public string Password { get; set; } = null!;
         public DateTime EnrollmentDate { get; set; }
+
+        public virtual Userdetail? Userdetail { get; set; }
     }
 }

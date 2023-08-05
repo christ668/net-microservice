@@ -15,6 +15,9 @@ namespace common.Data.UserData
         public string Username { get; set; }
         public string Password { get; set; }
         public DateTime EnrollmentDate { get; set; }
+        public string ActiveAddress { get; set; }
+        public string NIK { get; set; }
+        public string MaritalStatus { get; set; }
 
         public UserData()
         {
@@ -28,6 +31,9 @@ namespace common.Data.UserData
             Username = model.Username;
             Password = model.Password;
             EnrollmentDate = model.EnrollmentDate;
+            ActiveAddress = model.Userdetail!.ActiveAddress!;
+            NIK = model.Userdetail!.Nik!;
+            MaritalStatus = model.Userdetail!.MaritalStatus!;
         }
     }
 }

@@ -41,7 +41,10 @@ namespace admin.Services.UserService
                   LastName = s.LastName,
                   Username = s.Username,
                   Password = s.Password,
-                  EnrollmentDate = s.EnrollmentDate
+                  EnrollmentDate = s.EnrollmentDate,
+                  ActiveAddress= s.Userdetail!.ActiveAddress!,
+                  NIK = s.Userdetail.Nik!,
+                  MaritalStatus = s.Userdetail.MaritalStatus,
               }
             ).ToListAsync();
 
@@ -80,10 +83,20 @@ namespace admin.Services.UserService
                 LastName = User.LastName,
                 Username = User.Username,
                 Password = _hashGenerator.HashPassword(User.Password),
-                EnrollmentDate = User.EnrollmentDate
+                EnrollmentDate = User.EnrollmentDate,
             };
 
             _DBContext.Users.Add(entity);
+            await _DBContext.SaveChangesAsync();
+
+            entity.Userdetail = new Userdetail()
+            {
+                Id = User.Id,
+                ActiveAddress= User.ActiveAddress,
+                Nik= User.NIK,
+                MaritalStatus= User.MaritalStatus
+            };
+
             await _DBContext.SaveChangesAsync();
             await _redisService.DeleteKey(RedisKeyConstants.USER_MODEL);
 
@@ -95,6 +108,9 @@ namespace admin.Services.UserService
             var entity = await _DBContext.Users.FirstOrDefaultAsync(s => s.Id == User.Id);
             if (entity == null) throw new ErrorException(ErrorUtil.NoUserFound);
 
+            var checkDetail = await _DBContext.Userdetails.FirstOrDefaultAsync(s => s.Id == User.Id);
+            if (checkDetail == null) throw new ErrorException(ErrorUtil.NoUserDetailFound);
+
             entity.FirstName = User.FirstName;
             entity.LastName = User.LastName;
             entity.Username = User.Username;
@@ -102,6 +118,18 @@ namespace admin.Services.UserService
             entity.EnrollmentDate = User.EnrollmentDate;
 
             await _DBContext.SaveChangesAsync();
+
+            entity.Userdetail = checkDetail;
+
+            if(entity.Userdetail != null)
+            {
+                entity.Userdetail.Nik = User.NIK;
+                entity.Userdetail.ActiveAddress = User.ActiveAddress;
+                entity.Userdetail.MaritalStatus = User.MaritalStatus;
+
+                await _DBContext.SaveChangesAsync();
+            }
+
             await _redisService.DeleteKey(RedisKeyConstants.USER_MODEL);
 
             return new UserData(entity);
@@ -111,8 +139,15 @@ namespace admin.Services.UserService
             var check = await _DBContext.Users.FirstOrDefaultAsync(s => s.Id == Id);
             if (check == null) throw new ErrorException(ErrorUtil.NoUserFound);
 
+            var checkDetail = await _DBContext.Userdetails.FirstOrDefaultAsync(s => s.Id == Id);
+            if (checkDetail == null) throw new ErrorException(ErrorUtil.NoUserDetailFound);
+
+            _DBContext.Userdetails.Remove(checkDetail);
+            await _DBContext.SaveChangesAsync();
+
             _DBContext.Users.Remove(check);
             await _DBContext.SaveChangesAsync();
+
             await _redisService.DeleteKey(RedisKeyConstants.USER_MODEL);
         }
     }
