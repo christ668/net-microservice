@@ -10,5 +10,6 @@ namespace Redis.Constants
     {
         public static string USER_MODEL => "USER_MODEL";
         public static string GUEST_TABLE_MODEL => "GUEST_TABLE_MODEL";
+        public static string RECIPE_MODEL => "RECIPE_MODEL";
     }
 }

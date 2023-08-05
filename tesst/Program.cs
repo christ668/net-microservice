@@ -1,4 +1,5 @@
 using admin.Services.GuestTableService;
+using admin.Services.RecipeService;
 using admin.Services.UserAuthService;
 using admin.Services.UserService;
 using common.Helper.HashGenerator;
@@ -36,6 +37,7 @@ if (redisOptions.Enabled)
 builder.Services.AddScoped<IUserService, UserService>();
 builder.Services.AddScoped<IUserAuthService, UserAuthService>();
 builder.Services.AddScoped<IGuestTableService, GuestTableService>();
+builder.Services.AddScoped<IRecipeService, RecipeService>();
 builder.Services.AddScoped<ITokenGenerator, TokenGenerator>();
 builder.Services.AddScoped<IHashGenerator, HashGenerator>();
 
