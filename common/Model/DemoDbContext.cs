@@ -16,6 +16,7 @@ namespace common.Model
         {
         }
 
+        public virtual DbSet<Guesttable> Guesttables { get; set; } = null!;
         public virtual DbSet<User> Users { get; set; } = null!;
         public virtual DbSet<Userdetail> Userdetails { get; set; } = null!;
 
@@ -32,6 +33,21 @@ namespace common.Model
         {
             modelBuilder.UseCollation("utf8mb4_general_ci")
                 .HasCharSet("utf8mb4");
+
+            modelBuilder.Entity<Guesttable>(entity =>
+            {
+                entity.ToTable("guesttable");
+
+                entity.Property(e => e.Id)
+                    .HasColumnType("int(11)")
+                    .ValueGeneratedNever();
+
+                entity.Property(e => e.Chair).HasColumnType("int(11)");
+
+                entity.Property(e => e.PlacementDate).HasColumnType("datetime");
+
+                entity.Property(e => e.RoomPosition).HasMaxLength(50);
+            });
 
             modelBuilder.Entity<User>(entity =>
             {

@@ -76,6 +76,9 @@ namespace admin.Services.UserService
         }
         public async Task<UserData> Add(UserData User)
         {
+            var entityCheck = await _DBContext.Users.FirstOrDefaultAsync(s => s.Id == User.Id);
+            if (entityCheck != null) throw new ErrorException(ErrorUtil.UserAlreadyExist);
+
             var entity = new User()
             {
                 Id = User.Id,
